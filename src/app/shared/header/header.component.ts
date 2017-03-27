@@ -2,19 +2,17 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'cp-header',
-  template: `<div class="bg-inverse" style="width:100%;position:relative">
-        <ul class="nav nav-tabs bg-inverse ">
-          <li class="nav-item">
-            <a class="nav-link active" >Active</a>
-          </li>
-         
-        </ul>
-        <div style="position:absolute;top:0;right:0">
-
-            <a type="button" class="btn btn-raised btn-secondary" [routerLink]="['/user']">LogIn/Register</a>
-            
-        </div>
-   </div>
+  template: `<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Car Pool</a>
+    </div>
+    <ul class="nav navbar-nav pull-right">
+      <li class="active"><a [routerLink]="['/user']">login/Register</a></li>
+      
+    </ul>
+  </div>
+</nav>
   `,
   styles: []
 })
