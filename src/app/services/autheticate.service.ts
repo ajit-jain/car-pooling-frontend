@@ -8,7 +8,11 @@ export class AutheticateService {
   createUser(body:Object):Observable<any>{
     console.log("In Observable");
     return this._http.post('http://localhost:8000/signup',body).map((data)=>data.json())
-    .catch((err)=>Observable.throw(err.json().message || 'Server Error'))
+    .catch((err)=>Observable.throw(err.message || 'Server Error'))
   }
-
+  verifyUser(body:Object):Observable<any>{
+    return this._http.post("http://localhost:8000/verify",body)
+    .map((data)=>data.json())
+    .catch((err)=>Observable.throw(err.message || 'Server Error'));
+  }
 }

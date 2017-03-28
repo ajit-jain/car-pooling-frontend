@@ -10,6 +10,8 @@ import {AutheticateService} from '../../services/autheticate.service';
 })
 export class AuthenticateComponent implements OnInit {
 authType:String='Sign In';
+otpBox=true;
+otpHolder;
   SignupForm:FormGroup;
   LoginForm:FormGroup;
   constructor(private _fb:FormBuilder,private auth:AutheticateService) { }
@@ -36,10 +38,14 @@ authType:String='Sign In';
     console.log("sjsj",this.SignupForm.controls['email'].value);
     var obj={
       'email':this.SignupForm.controls['email'].value,
-      'password':this.SignupForm.controls['password'].value
+      'password':this.SignupForm.controls['password'].value,
+      'mobile':'91'+this.SignupForm.controls['mobile'].value
     };
     this.auth.createUser(obj).subscribe((data)=>{
       console.log(data);
+      this.otpBox=false;
     })
+  }
+  createUser(value){
   }
 }

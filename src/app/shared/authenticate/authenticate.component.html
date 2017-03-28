@@ -4,27 +4,30 @@
             <h1 class="text-center login-title">Sign  to Car-pool</h1>
             <div class="account-wall">
                 
-                <form class="form-signin" [formGroup]="SignupForm" [class.hidden]="authType==='Sign In'"
+                <form class="form-signin" [formGroup]="SignupForm" [class.hidden]="authType==='Sign In' && otpBox"
                 novalidate (ngSubmit)="authorizeUser()">
                     <div  [ngClass]="{'has-error':(!SignupForm.controls.username.valid) && (SignupForm.controls.username.touched)}">
                         <input type="text" name="username"
                         class="form-control" formControlName="username" 
                         placeholder="UserName" required autofocus>
                      </div>
-                     <div  [ngClass]="{'has-error':(!SignupForm.controls.email.valid) && (SignupForm.controls.username.touched)}">
+                     <div  [ngClass]="{'has-error':(!SignupForm.controls.email.valid) && (SignupForm.controls.email.touched)}">
                         
                         <input type="text" name="email" class="form-control" formControlName="email"
                         placeholder="Email" required autofocus>
                      </div>
-                     <div  [ngClass]="{'has-error':(!SignupForm.controls.password.valid) && (SignupForm.controls.username.touched)}">
+                     <div  [ngClass]="{'has-error':(!SignupForm.controls.password.valid) && (SignupForm.controls.password.touched)}">
                         <input type="password" name="password" class="form-control" formControlName="password"
                         placeholder="Password" required>
                      </div>
-                    <input 
-                    type="password" class="form-control" name="confirm" formControlName="confirm"
-                    placeholder="Confirm password" required autofocus>
-                    <input  formControlName="mobile" name="mobile"
-                    type="tel" class="form-control" placeholder="Mobile" required autofocus>
+                     <div [ngClass]="{'has-error':(!SignupForm.controls.confirm.valid) && (SignupForm.controls.confirm.touched)}">
+                        <input type="password" class="form-control" name="confirm" formControlName="confirm"
+                        placeholder="Confirm password" required autofocus>
+                     </div>
+                     <div [ngClass]="{'has-error':(!SignupForm.controls.mobile.valid) && (SignupForm.controls.mobile.touched)}">
+                        <input  formControlName="mobile" name="mobile"
+                        type="tel" class="form-control" placeholder="Mobile" required autofocus>
+                     </div>
                     <button class="btn btn-lg btn-primary btn-block" 
                     [disabled]="!SignupForm.valid" type="submit">{{authType}}</button>
                     <label class="checkbox pull-left">
@@ -33,7 +36,7 @@
                     </label>
                     <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span>
                 </form>
-                 <form class="form-signin" [class.hidden]="authType==='Sign Up'" [formGroup]="LoginForm" 
+                 <form class="form-signin" [class.hidden]="authType==='Sign Up' && otpBox" [formGroup]="LoginForm" 
                 novalidate (ngSubmit)="authorizeUser()">
                    
                     <input type="text" name="email" class="form-control" formControlName="email"
@@ -52,6 +55,11 @@
             </div>
             <a [class.hidden]="authType==='Sign Up'" (click)="authType='Sign Up'" class="text-center new-account">Create an account </a>
             <a [class.hidden]="authType==='Sign In'" (click)="authType='Sign In'" class="text-center new-account">Already have account </a>
+            <div [class.hidden]="otpBox">
+                <input type="number" class="input-lg" maxlength="4" minlength="4" #text/> 
+                <button type="button" class="btn btn-lg btn-primary" (click)="createUser(text.value)" >Go</button>
+            </div>
         </div>
     </div>
+    
 </div>
