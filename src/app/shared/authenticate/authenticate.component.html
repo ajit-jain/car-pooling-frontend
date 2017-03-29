@@ -1,11 +1,11 @@
 <div class="container">
-    <div class="row">
+    <div class="row" [class.hidden]="!otpBox">
         <div class="col-sm-6 col-md-4 col-md-offset-4">
             <h1 class="text-center login-title">Sign  to Car-pool</h1>
             <div class="account-wall">
-                
-                <form class="form-signin" [formGroup]="SignupForm" [class.hidden]="authType==='Sign In' && otpBox"
-                novalidate (ngSubmit)="authorizeUser()">
+                <div class="text-center form-signin text-danger" >{{messageBox}}</div>
+                <form class="form-signin" [formGroup]="SignupForm" [class.hidden]="authType==='Sign In'"
+                novalidate (ngSubmit)="authorizeUser($event)">
                     <div  [ngClass]="{'has-error':(!SignupForm.controls.username.valid) && (SignupForm.controls.username.touched)}">
                         <input type="text" name="username"
                         class="form-control" formControlName="username" 
@@ -21,7 +21,8 @@
                         placeholder="Password" required>
                      </div>
                      <div [ngClass]="{'has-error':(!SignupForm.controls.confirm.valid) && (SignupForm.controls.confirm.touched)}">
-                        <input type="password" class="form-control" name="confirm" formControlName="confirm"
+                        <input 
+                        type="password" class="form-control" name="confirm" formControlName="confirm"
                         placeholder="Confirm password" required autofocus>
                      </div>
                      <div [ngClass]="{'has-error':(!SignupForm.controls.mobile.valid) && (SignupForm.controls.mobile.touched)}">
@@ -36,8 +37,8 @@
                     </label>
                     <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span>
                 </form>
-                 <form class="form-signin" [class.hidden]="authType==='Sign Up' && otpBox" [formGroup]="LoginForm" 
-                novalidate (ngSubmit)="authorizeUser()">
+                 <form class="form-signin" [class.hidden]="authType==='Sign Up'" [formGroup]="LoginForm" 
+                novalidate (ngSubmit)="authorizeUser($event)">
                    
                     <input type="text" name="email" class="form-control" formControlName="email"
                      placeholder="Email" required autofocus>
@@ -53,13 +54,20 @@
                     <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span>
                 </form>
             </div>
-            <a [class.hidden]="authType==='Sign Up'" (click)="authType='Sign Up'" class="text-center new-account">Create an account </a>
-            <a [class.hidden]="authType==='Sign In'" (click)="authType='Sign In'" class="text-center new-account">Already have account </a>
-            <div [class.hidden]="otpBox">
-                <input type="number" class="input-lg" maxlength="4" minlength="4" #text/> 
-                <button type="button" class="btn btn-lg btn-primary" (click)="createUser(text.value)" >Go</button>
-            </div>
+            <a [class.hidden]="authType==='Sign Up'" (click)="authType='Sign Up';messageBox=''" class="text-center new-account">Create an account </a>
+            <a [class.hidden]="authType==='Sign In'" (click)="authType='Sign In';messageBox=''" class="text-center new-account">Already have account </a>
+            
         </div>
+    </div>
+    <div class="row" [class.hidden]="otpBox">
+         <div class="col-sm-6 col-md-4 col-md-offset-4">
+            <h1 class="text-center form-signin text-danger">{{messageBox}}</h1>
+            <div class="account-wall">
+                <input type="number" [formControl]="inputObserver" class="input-lg"/> 
+                <button type="button" class="btn btn-lg btn-primary" [disabled]="!inputObserver.valid"
+                 (click)="verifyOtp(inputObserver.value);messageBox=''" >Go</button>
+            </div>
+         </div>
     </div>
     
 </div>

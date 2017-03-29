@@ -9,9 +9,14 @@ import {AutheticateService} from '../../services/autheticate.service';
   styleUrls:['../assets/css/style.css']
 })
 export class AuthenticateComponent implements OnInit {
-authType:String='Sign In';
-otpBox=true;
-otpHolder;
+  authType:String='Sign In';
+  otpBox=true;
+  obj = {};
+  messageBox='';
+  validate(c){
+    return (c.value>=1000 && c.value<=9999)? null :{valid:false};
+  }
+  inputObserver=new FormControl('',this.validate);
   SignupForm:FormGroup;
   LoginForm:FormGroup;
   constructor(private _fb:FormBuilder,private auth:AutheticateService) { }
@@ -34,18 +39,69 @@ otpHolder;
       password:['',[Validators.required,Validators.minLength(6),Validators.maxLength(8)]],
     })
   }
-  authorizeUser(){
+  authorizeUser(event:any){
+    event.preventDefault();
+    if(this.authType === 'Sign Up'){
+        this.saveUser();      
+    }
+    if(this.authType === 'Sign In'){
+        this.checkUser();
+    }
+  }
+  saveUser(){
     console.log("sjsj",this.SignupForm.controls['email'].value);
-    var obj={
+    this.obj={
       'email':this.SignupForm.controls['email'].value,
       'password':this.SignupForm.controls['password'].value,
       'mobile':'91'+this.SignupForm.controls['mobile'].value
     };
-    this.auth.createUser(obj).subscribe((data)=>{
+    this.auth.createUser(this.obj).subscribe((data)=>{
       console.log(data);
-      this.otpBox=false;
+      if(data.success){
+        this.otpBox=false;
+        this.messageBox=data.message+"   proceed with otp";
+      }
+      else
+        this.messageBox=data.message;
+     
     })
   }
-  createUser(value){
+  checkUser(){
+      console.log("Log details",this.LoginForm.controls['email'],this.LoginForm.controls['password']);
+      this.obj={
+        email:this.LoginForm.controls['email'].value,
+        password:this.LoginForm.controls['password'].value
+      }
+      this.auth.loginUser(this.obj).subscribe((data)=>{
+        console.log(data);
+          if(!data.success)
+              this.messageBox=data.message;
+          else if(!data.data.active){
+            this.otpBox=false;
+            this.messageBox=data.message;
+          }
+          else{
+              this.messageBox=data.message;
+              localStorage.setItem('token',data.data.token);
+          }
+
+      },(err)=>{
+        console.log(err);
+        this.messageBox="something went wrong..."
+      })
+  }
+  verifyOtp(value){
+    this.auth.verifyUser({email:this.obj['email'],otp:value})
+    .subscribe((result)=>{
+      if(result.token){
+         // this.inputObserver.value='';
+          this.otpBox=true;
+          localStorage.setItem('token',result.token);
+      }
+      else{
+          this.messageBox=result.message;        
+      }
+    })
+
   }
 }

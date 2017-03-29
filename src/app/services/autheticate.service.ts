@@ -11,8 +11,15 @@ export class AutheticateService {
     .catch((err)=>Observable.throw(err.message || 'Server Error'))
   }
   verifyUser(body:Object):Observable<any>{
+    console.log("In Verify");
     return this._http.post("http://localhost:8000/verify",body)
     .map((data)=>data.json())
     .catch((err)=>Observable.throw(err.message || 'Server Error'));
+  }
+  loginUser(body:Object):Observable<any>{
+    console.log("In Login");
+    return this._http.post("http://localhost:8000/login",body)
+          .map(data=>data.json())
+          .catch((err)=>Observable.throw(err.message || 'Server Error'));
   }
 }
