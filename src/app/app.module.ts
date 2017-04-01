@@ -4,27 +4,31 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import {RouterModule} from '@angular/router';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './components/home/home.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { AuthenticateComponent } from './shared/authenticate/authenticate.component';
 import { AutheticateService } from './services/autheticate.service';
+import {LocalStorageService} from './services/localStorage.service';
+import { RegisterDetailsComponent} from './components/register-details/register-details.component';
 const rootRoutes:ModuleWithProviders=RouterModule.forRoot([
   
   { path:'user', component:AuthenticateComponent },
+  { path:'register_details', component:RegisterDetailsComponent}
   ])
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     HeaderComponent,
-    AuthenticateComponent
+    AuthenticateComponent,
+    RegisterDetailsComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,rootRoutes,ReactiveFormsModule
   ],
-  providers: [AutheticateService],
+  providers: [AutheticateService,LocalStorageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

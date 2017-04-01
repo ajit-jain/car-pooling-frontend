@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import {AutheticateService} from  '../../services/autheticate.service';
 @Component({
   selector: 'cp-header',
   template: `<nav class="navbar navbar-inverse">
@@ -8,19 +8,22 @@ import { Component, OnInit } from '@angular/core';
       <a class="navbar-brand" href="#">Car Pool</a>
     </div>
     <ul class="nav navbar-nav pull-right">
-      <li class="active"><a [routerLink]="['/user']">login/Register</a></li>
-      
+      <li class="active" [class.hidden]="_authService.isLoggedIn() | async"><a [routerLink]="['/user']">login/Register</a></li>
+      <li class="active" [class.hidden]="!(_authService.isLoggedIn() | async)"><button class="btn custom-btn" (click)="logout()">Logout</button>
     </ul>
   </div>
 </nav>
   `,
-  styles: []
+  styleUrls:['../assets/css/style.css']
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _authService:AutheticateService) { }
 
   ngOnInit() {
   }
-
+  logout(){
+    this._authService.logoutUser();
+    
+  }
 }

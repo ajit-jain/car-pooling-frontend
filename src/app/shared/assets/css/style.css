@@ -73,3 +73,10 @@
     display: block;
     margin-top: 10px;
 }
+.custom-btn{
+    outline-color: white;
+    background-color: black;
+    border: 1px solid;
+    border-radius: 1px;
+    color: white;
+}

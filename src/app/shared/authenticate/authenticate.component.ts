@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder,FormControl,Validators,FormGroup} from '@angular/forms';
 import {CustomValidators} from 'ng2-validation';
 import {AutheticateService} from '../../services/autheticate.service';
+import { Router } from '@angular/router'
 @Component({
   selector: 'cp-authenticate',
   templateUrl:'./authenticate.component.html',
@@ -19,7 +20,8 @@ export class AuthenticateComponent implements OnInit {
   inputObserver=new FormControl('',this.validate);
   SignupForm:FormGroup;
   LoginForm:FormGroup;
-  constructor(private _fb:FormBuilder,private auth:AutheticateService) { }
+  constructor(private _fb:FormBuilder,
+  private auth:AutheticateService,private _router:Router) { }
 
   ngOnInit() {
     let password= new FormControl('',
@@ -82,7 +84,6 @@ export class AuthenticateComponent implements OnInit {
           }
           else{
               this.messageBox=data.message;
-              localStorage.setItem('token',data.data.token);
           }
 
       },(err)=>{
@@ -91,16 +92,18 @@ export class AuthenticateComponent implements OnInit {
       })
   }
   verifyOtp(value){
+
     this.auth.verifyUser({email:this.obj['email'],otp:value})
     .subscribe((result)=>{
       if(result.token){
-         // this.inputObserver.value='';
-          this.otpBox=true;
-          localStorage.setItem('token',result.token);
+        this.otpBox=true;
+        this._router.navigateByUrl('/register_details')
       }
       else{
           this.messageBox=result.message;        
       }
+    },(err)=>{
+      console.log(err);
     })
 
   }
