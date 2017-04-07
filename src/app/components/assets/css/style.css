@@ -1,0 +1,16 @@
+*{
+    box-sizing:border-box;
+}
+.for-lg{
+    width:50%;
+    float:left;
+    box-shadow: 1px 1px 1px #f2f2f2;
+    box-sizing:border-box;
+}
+@media(max-width:767px){
+    .for-lg{
+        width:100%;
+        box-shadow: 1px 1px 1px #f2f2f2;
+        margin-top: 20px;
+    }
+}
