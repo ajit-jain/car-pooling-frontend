@@ -10,6 +10,9 @@ import { AuthenticateComponent } from './shared/authenticate/authenticate.compon
 import { AutheticateService } from './services/autheticate.service';
 import {LocalStorageService} from './services/localStorage.service';
 import { RegisterDetailsComponent} from './components/register-details/register-details.component';
+import { EmployeeComponent } from './components/register-details/components/employee/employee.component';
+import { BusinessOwnerComponent } from './components/register-details/components/business-owner/business-owner.component';
+import { UserdetailsComponent } from './components/register-details/components/userdetails/userdetails.component';
 const rootRoutes:ModuleWithProviders=RouterModule.forRoot([
   
   { path:'user', component:AuthenticateComponent },
@@ -21,7 +24,10 @@ const rootRoutes:ModuleWithProviders=RouterModule.forRoot([
     HomeComponent,
     HeaderComponent,
     AuthenticateComponent,
-    RegisterDetailsComponent
+    RegisterDetailsComponent,
+    EmployeeComponent,
+    BusinessOwnerComponent,
+    UserdetailsComponent
   ],
   imports: [
     BrowserModule,

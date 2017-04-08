@@ -1,34 +1,40 @@
-<form class="form-horizontal" style="box-sizing:border-box;width:100%">
+<form class="form-horizontal" [formGroup]="registerDetails" novalidate (ngSubmit)="saveDetails()" style="box-sizing:border-box;width:100%">
 <fieldset style="box-sizing:border-box;width:100%">
 
 <!-- Form Name -->
 <legend>General</legend>
 
 <!-- Text input -->
+<!-- ========================================      Personal Details ============================== -->
 <div class="for-lg">
+    <div class="caption">Personal Details</div>
+     <!--<userdetails [personalDetails]="registerDetails.controls['personalDetails']"></userdetails>--> 
+     
+</div>
+<!-- ========================================   Work Details ============================== -->
+<div class="for-lg">
+    <div class="caption">Work Details</div>
     <div class="form-group">
-        <label class="col-sm-2 hidden-xs control-label" for="email">Email</label> 
-        <label class="col-xs-1"></label>
-        <div class="col-sm-8 col-xs-10"> 
-        <input name="documentid" class="form-control input-md"
-        id="documentid" type="text" placeholder="E-mail"> 
+        <label class="col-xs-1 hidden-sm hidden-md hidden-lg"></label>
+        <label class="col-sm-2 col-xs-3 control-label center" for="status">Work Status</label> 
+       
+        <div class="col-sm-8 col-xs-6" id="status"> 
+            <div class="radio left-float"> <label><input type="radio" name="optradio"  [(ngModel)]="checkedEle" [checked]='true' [value]="true">Salaried</label></div>
+           <div class="radio left-float"> <label><input type="radio" name="optradio" [(ngModel)]="checkedEle" [value]="false"> Business Owner</label></div>
         </div>
         <label class="col-xs-1"></label>
     </div>
+    <!-- ========================================      Salaried  ============================== -->
+    <employee *ngIf="checkedEle" ></employee>
+    <!-- ========================================      Work Details ============================== -->
+    <business-owner *ngIf="!checkedEle"></business-owner>
 
 </div>
-<div class="for-lg">
-    <div class="form-group" >
-        <label class="col-sm-2 hidden-xs control-label" for="email">Email</label> 
-        <label class="col-xs-1"></label>
-        <div class="col-sm-8 col-xs-10"> 
-        <input name="documentid" class="form-control input-md"
-        id="documentid" type="text" placeholder="E-mail"> 
-        </div>
-        <label class="col-xs-1"></label>
-    </div>
-
+<div style="clear: both"></div>
+<div class="form-group">
+    <button class="btn btn-lg btn-success col-sm-offset-5 col-xs-offset-5 ">Save</button>
 </div>
 </fieldset>
+    
 </form>
 

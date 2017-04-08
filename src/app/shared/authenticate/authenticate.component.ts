@@ -55,7 +55,8 @@ export class AuthenticateComponent implements OnInit {
     this.obj={
       'email':this.SignupForm.controls['email'].value,
       'password':this.SignupForm.controls['password'].value,
-      'mobile':'91'+this.SignupForm.controls['mobile'].value
+      'mobile':'91'+this.SignupForm.controls['mobile'].value,
+      'username':this.SignupForm.controls['username'].value
     };
     this.auth.createUser(this.obj).subscribe((data)=>{
       console.log(data);
@@ -84,6 +85,7 @@ export class AuthenticateComponent implements OnInit {
           }
           else{
               this.messageBox=data.message;
+               this._router.navigateByUrl('/register_details');
           }
 
       },(err)=>{
@@ -95,9 +97,10 @@ export class AuthenticateComponent implements OnInit {
 
     this.auth.verifyUser({email:this.obj['email'],otp:value})
     .subscribe((result)=>{
-      if(result.token){
+      console.log(result);
+      if(result.data){
         this.otpBox=true;
-        this._router.navigateByUrl('/register_details')
+        this._router.navigate(['/register_details'])
       }
       else{
           this.messageBox=result.message;        

@@ -5,7 +5,7 @@ import {LocalStorageService} from '../services/localStorage.service';
 @Injectable()
 export class AutheticateService {
   isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
-
+  dataSubject = new BehaviorSubject<Object>({});
   /**
    * 
    * @returns {boolean} 
@@ -25,9 +25,11 @@ export class AutheticateService {
     return this._http.post("http://localhost:8000/verify",body)
     .map((data)=>data.json())
     .map((res)=>{
-      if(!!res.token){
-          this.StorageService.store('token',res.token);
+      if(!!res.data.token){
+        console.log(res.data);
+          this.StorageService.store('token',res.data.token);
           this.isLoggedInSubject.next(true);
+          this.dataSubject.next(res.data);
       }
       return res;
     })
@@ -43,6 +45,7 @@ export class AutheticateService {
             if(res.data && res.data.active){
               this.StorageService.store('token',res.data.token);
               this.isLoggedInSubject.next(true);
+              this.dataSubject.next(res.data);
             }
             return res;
           })
@@ -51,8 +54,12 @@ export class AutheticateService {
   isLoggedIn():Observable<any>{
     return this.isLoggedInSubject.asObservable();
   }
+  getData():Observable<any>{
+    return this.dataSubject.asObservable();
+  }
   logoutUser(){
     this.StorageService.delete('token');
     this.isLoggedInSubject.next(false);
+    this.dataSubject.next({});
   }
 }
