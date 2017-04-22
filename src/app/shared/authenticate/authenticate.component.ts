@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder,FormControl,Validators,FormGroup} from '@angular/forms';
 import {CustomValidators} from 'ng2-validation';
-import {AutheticateService} from '../../services/autheticate.service';
+import {AutheticateService} from '../services/autheticate.service';
+import {CookieService} from '../services/cookie.service';
+import {environment} from '../../../environments/environment';
 import { Router } from '@angular/router'
 @Component({
   selector: 'cp-authenticate',
@@ -21,7 +23,8 @@ export class AuthenticateComponent implements OnInit {
   SignupForm:FormGroup;
   LoginForm:FormGroup;
   constructor(private _fb:FormBuilder,
-  private auth:AutheticateService,private _router:Router) { }
+  private auth:AutheticateService,private _router:Router,
+  private _cookie:CookieService) { }
 
   ngOnInit() {
     let password= new FormControl('',
@@ -86,6 +89,8 @@ export class AuthenticateComponent implements OnInit {
           else{
               this.messageBox=data.message;
                this._router.navigateByUrl('/register_details');
+               alert(JSON.stringify(data));
+               this._cookie.setCookie("credentials",{_id:data.data._id,token:data.data.token},1,environment.API)
           }
 
       },(err)=>{

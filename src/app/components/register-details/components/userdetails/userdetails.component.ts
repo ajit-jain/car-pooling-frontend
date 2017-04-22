@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {AutheticateService} from '../../../../services/autheticate.service';
+import {AutheticateService} from '../../../../shared/services/autheticate.service';
+import {CookieService} from '../../../../shared/services/cookie.service';
 import {FormGroup} from '@angular/forms';
 @Component({
   selector: 'userdetails',
@@ -27,7 +28,7 @@ import {FormGroup} from '@angular/forms';
         <label class="col-sm-2 hidden-xs control-label" for="mobile">Mobile</label> 
         <label class="col-xs-1"></label>
         <div class="col-sm-8 col-xs-10"> 
-        <input name="mobile"  class="form-control input-md"
+        <input name="mobile" formControlName="mobile"  class="form-control input-md"
             id="mobile" type="tel" placeholder="mobile" > 
         </div>
         <label class="col-xs-1"></label>
@@ -37,10 +38,8 @@ import {FormGroup} from '@angular/forms';
         <label class="col-xs-1"></label>
         <div class="col-sm-8 col-xs-10"> 
             
-            <select class="form-control" id="gender">
-                <option>Male</option>
-                <option>Female</option>
-                <option>Trans</option>
+            <select class="form-control" formControlName="gender" id="gender">
+                <option *ngFor="let gender of genderOptions" [value]="gender.value">{{ gender.text }}</option>
             </select>
       
         </div>
@@ -51,9 +50,8 @@ import {FormGroup} from '@angular/forms';
         <label class="col-sm-2 col-xs-3 control-label center" for="type">User type</label> 
        
         <div class="col-sm-8 col-xs-6" id="type"> 
-            <div class="radio left-float"> <label><input type="radio" name="optradio">Pooler</label></div>
-           <div class="radio left-float"> <label><input type="radio" name="optradio">Seeker</label></div>
-           <div class="radio left-float"> <label><input type="radio" name="optradio">Both</label></div>
+            <div class="radio left-float" *ngFor="let user of userTypes"> <label><input type="radio" formControlName="user_type" name="user_type" [value]="user.value">{{user.text}}</label></div>
+           
         </div>
         <label class="col-xs-1"></label>
     </div>
@@ -61,7 +59,7 @@ import {FormGroup} from '@angular/forms';
         <label class="col-sm-2 hidden-xs control-label" for="address">Address</label> 
         <label class="col-xs-1"></label>
         <div class="col-sm-8 col-xs-10"> 
-            <textarea class="form-control" rows="2" id="address"></textarea>
+            <textarea class="form-control" formControlName="address" rows="2" id="address"></textarea>
         </div>
         <label class="col-xs-1"></label>
     </div>
@@ -71,14 +69,38 @@ import {FormGroup} from '@angular/forms';
 })
 export class UserdetailsComponent implements OnInit {
 
-  constructor(private _auth:AutheticateService) { }
-  @Input() personalDetails;
+  constructor(private _auth:AutheticateService,private _cookie:CookieService) { }
+  @Input() personalDetails:FormGroup;
+  genderOptions:Array<Object>;
+  userTypes:Array<Object>;
   ngOnInit() {
-    this._auth.getData().subscribe((data)=>{
-       if(Object.keys(data).length){
-
-       }
-    })
+        this.genderOptions=[
+            {value:"Male",text:"Male"},
+            {value:"Female",text:"Female"},
+            {value:"Trans", text:"Trans"}
+        ];
+        this.userTypes=[
+            {value:"pooler",text:"Pooler"},
+            {value:"seeker",text:"Seeker"},
+            {value:"both", text:"Both"}
+        ];
+        this.personalDetails.valueChanges.subscribe((val)=>{
+          console.log(this.personalDetails.valid);
+      })
+      let _id = (this._cookie.getCookie('credentials')['_id']);
+      console.log("ssh",_id);
+        if(!!_id){
+            this._auth.getUser(_id).subscribe((data)=>{
+                console.log(data);
+                this.personalDetails.patchValue({'username':data.data.local.username,'email':data.data.local.email,'mobile':data.data.local.mobile});
+            })
+        } 
+    // this._auth.getData().subscribe((data)=>{
+    //    if(Object.keys(data).length){
+    //         this.personalDetails.patchValue({'username':data.username,'email':data.email,'mobile':data.mobile});
+       
+    //    }
+    // })
   }
 
 }

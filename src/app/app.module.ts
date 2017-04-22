@@ -7,16 +7,19 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { AuthenticateComponent } from './shared/authenticate/authenticate.component';
-import { AutheticateService } from './services/autheticate.service';
-import {LocalStorageService} from './services/localStorage.service';
+import { AutheticateService } from './shared/services/autheticate.service';
+import {LocalStorageService} from './shared/services/localStorage.service';
+import {AuthGaurd} from './shared/gaurds/AuthGaurd.service';
+import {CookieService} from './shared/services/cookie.service';
 import { RegisterDetailsComponent} from './components/register-details/register-details.component';
 import { EmployeeComponent } from './components/register-details/components/employee/employee.component';
 import { BusinessOwnerComponent } from './components/register-details/components/business-owner/business-owner.component';
 import { UserdetailsComponent } from './components/register-details/components/userdetails/userdetails.component';
+import {NgxErrorsModule} from '@ultimate/ngxerrors';
 const rootRoutes:ModuleWithProviders=RouterModule.forRoot([
   
   { path:'user', component:AuthenticateComponent },
-  { path:'register_details', component:RegisterDetailsComponent}
+  { path:'register_details', component:RegisterDetailsComponent,canActivate:[AuthGaurd]}
   ])
 @NgModule({
   declarations: [
@@ -32,9 +35,9 @@ const rootRoutes:ModuleWithProviders=RouterModule.forRoot([
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,rootRoutes,ReactiveFormsModule
+    HttpModule,rootRoutes,ReactiveFormsModule,NgxErrorsModule
   ],
-  providers: [AutheticateService,LocalStorageService],
+  providers: [AutheticateService,LocalStorageService,AuthGaurd,CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

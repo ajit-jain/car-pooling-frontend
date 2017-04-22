@@ -6,28 +6,63 @@
                 <div class="text-center form-signin text-danger" >{{messageBox}}</div>
                 <form class="form-signin" [formGroup]="SignupForm" [class.hidden]="authType==='Sign In'"
                 novalidate (ngSubmit)="authorizeUser($event)">
-                    <div  [ngClass]="{'has-error':(!SignupForm.controls.username.valid) && (SignupForm.controls.username.touched)}">
+                    <div>
                         <input type="text" name="username"
                         class="form-control" formControlName="username" 
                         placeholder="UserName" required autofocus>
+                        <div ngxErrors="username">
+                            <div style="color:red" ngxError="required" [when]="['touched','dirty']">
+                                UserName required
+                            </div>
+                        </div>
                      </div>
-                     <div  [ngClass]="{'has-error':(!SignupForm.controls.email.valid) && (SignupForm.controls.email.touched)}">
+                     <div>
                         
                         <input type="text" name="email" class="form-control" formControlName="email"
                         placeholder="Email" required autofocus>
+            
+                        <div ngxErrors="email">
+                            <div style="color:red" [ngxError]="'required'" [when]="['touched','dirty']">
+                                Email Required
+                            </div>
+                            <div style="color:red" ngxError="pattern" [when]="['touched','dirty']">
+                                Invalid Email
+                            </div>
+                        </div>
                      </div>
-                     <div  [ngClass]="{'has-error':(!SignupForm.controls.password.valid) && (SignupForm.controls.password.touched)}">
+                     <div>
                         <input type="password" name="password" class="form-control" formControlName="password"
                         placeholder="Password" required>
+                        <div ngxErrors="password">
+                            <div style="color:red" [ngxError]="'required'" [when]="['touched','dirty']">
+                                password Required
+                            </div>
+                            <div style="color:red" [ngxError]="['minlength','maxlength']">
+                                password must contain 6 to 8 characters
+                            </div>
+                        </div>
                      </div>
-                     <div [ngClass]="{'has-error':(!SignupForm.controls.confirm.valid) && (SignupForm.controls.confirm.touched)}">
+                     <div>
                         <input 
                         type="password" class="form-control" name="confirm" formControlName="confirm"
                         placeholder="Confirm password" required autofocus>
+                        <div ngxErrors="confirm" >
+                            <div style="color:red" [ngxError]="'equalTo'"  [when]="['touched','dirty']">
+                                password should be same as above
+                            </div>
+                        </div>
                      </div>
-                     <div [ngClass]="{'has-error':(!SignupForm.controls.mobile.valid) && (SignupForm.controls.mobile.touched)}">
+                     <div>
                         <input  formControlName="mobile" name="mobile"
                         type="tel" class="form-control" placeholder="Mobile" required autofocus>
+                        <div ngxErrors="mobile"  >
+                            <div style="color:red" [ngxError]="'required'" [when]="['touched','dirty']">
+                                Mobile Required
+                            </div>
+                            <div style="color:red" [ngxError]="'pattern'">
+                                Enter Valid Mobile number 
+                            </div>
+                        </div>
                      </div>
                     <button class="btn btn-lg btn-primary btn-block" 
                     [disabled]="!SignupForm.valid" type="submit">{{authType}}</button>
@@ -39,12 +74,30 @@
                 </form>
                  <form class="form-signin" [class.hidden]="authType==='Sign Up'" [formGroup]="LoginForm" 
                 novalidate (ngSubmit)="authorizeUser($event)">
-                   
+                   <div>
                     <input type="text" name="email" class="form-control" formControlName="email"
                      placeholder="Email" required autofocus>
+                     <div ngxErrors="email">
+                            <div style="color:red" [ngxError]="'required'"  [when]="['touched','dirty']">
+                                Email Required
+                            </div>
+                            <div style="color:red" [ngxError]="'pattern'">
+                                Enter Valid Email
+                            </div>
+                        </div>
+                   </div>
+                   <div>
                     <input type="password" name="password" class="form-control" formControlName="password"
                     placeholder="Password" required>
-                    
+                     <div ngxErrors="password">
+                            <div style="color:red" [ngxError]="'required'" [when]="['touched','dirty']">
+                                password Required
+                            </div>
+                            <div style="color:red" [ngxError]="['minlength','maxlength']">
+                                password must contain 6 to 8 characters
+                            </div>
+                        </div>
+                   </div>
                     <button class="btn btn-lg btn-primary btn-block" 
                     [disabled]="!LoginForm.valid" type="submit">{{authType}}</button>
                     <label class="checkbox pull-left">
