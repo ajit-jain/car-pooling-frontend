@@ -17,7 +17,8 @@ import { BusinessOwnerComponent } from './components/register-details/components
 import { UserdetailsComponent } from './components/register-details/components/userdetails/userdetails.component';
 import {NgxErrorsModule} from '@ultimate/ngxerrors';
 const rootRoutes:ModuleWithProviders=RouterModule.forRoot([
-  
+  {path:'',redirectTo:'home',pathMatch:'full'},
+  {path:'home',component:HomeComponent},
   { path:'user', component:AuthenticateComponent },
   { path:'register_details', component:RegisterDetailsComponent,canActivate:[AuthGaurd]}
   ])

@@ -18,7 +18,7 @@ export class AutheticateService extends BaseService{
    }
 
   constructor(private _http:Http,private StorageService:LocalStorageService) {
-    super();
+    super(StorageService);
    }
   createUser(body:Object):Observable<any>{
     console.log("In Observable");
@@ -57,14 +57,17 @@ export class AutheticateService extends BaseService{
           .catch((err)=>Observable.throw(err.message || 'Server Error'));
   }
   isLoggedIn():Observable<any>{
+   
     return this.isLoggedInSubject.asObservable();
   }
   getData():Observable<any>{
     return this.dataSubject.asObservable();
   }
   logoutUser(){
+  
     this.StorageService.delete('token');
     this.isLoggedInSubject.next(false);
+    
     this.dataSubject.next({});
   }
   registerUser(data:User):Observable<any>{
@@ -74,7 +77,7 @@ export class AutheticateService extends BaseService{
   }
   getUser(_id:string):Observable<any>{
     let data = {_id:_id};
-    return this._http.post(this._url+'/getUser',data)
+    return this._http.get(this._url+'/getUser',{headers:this.setAuthHeaders()})
             .map(this.extractData)
             .catch((err)=>Observable.throw(err.message||"Server Error")); 
   }

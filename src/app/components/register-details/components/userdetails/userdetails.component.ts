@@ -90,17 +90,12 @@ export class UserdetailsComponent implements OnInit {
       let _id = (this._cookie.getCookie('credentials')['_id']);
       console.log("ssh",_id);
         if(!!_id){
-            this._auth.getUser(_id).subscribe((data)=>{
-                console.log(data);
-                this.personalDetails.patchValue({'username':data.data.local.username,'email':data.data.local.email,'mobile':data.data.local.mobile});
+            this._auth.getUser(_id).subscribe((response)=>{
+                console.log(response);
+                this.personalDetails.patchValue({'username':response.data.username,'email':response.data.email,'mobile':response.data.mobile});
             })
         } 
-    // this._auth.getData().subscribe((data)=>{
-    //    if(Object.keys(data).length){
-    //         this.personalDetails.patchValue({'username':data.username,'email':data.email,'mobile':data.mobile});
-       
-    //    }
-    // })
+    
   }
 
 }

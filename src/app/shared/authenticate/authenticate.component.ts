@@ -8,7 +8,6 @@ import { Router } from '@angular/router'
 @Component({
   selector: 'cp-authenticate',
   templateUrl:'./authenticate.component.html',
-
   styleUrls:['../assets/css/style.css']
 })
 export class AuthenticateComponent implements OnInit {
@@ -78,19 +77,22 @@ export class AuthenticateComponent implements OnInit {
         email:this.LoginForm.controls['email'].value,
         password:this.LoginForm.controls['password'].value
       }
-      this.auth.loginUser(this.obj).subscribe((data)=>{
-        console.log(data);
-          if(!data.success)
-              this.messageBox=data.message;
-          else if(!data.data.active){
+      this.auth.loginUser(this.obj).subscribe((response)=>{
+        console.log(response);
+          if(!response.success)
+              this.messageBox=response.message;
+          else if(!response.data.active){
             this.otpBox=false;
-            this.messageBox=data.message;
+            this.messageBox=response.message;
           }
           else{
-              this.messageBox=data.message;
-               this._router.navigateByUrl('/register_details');
-               alert(JSON.stringify(data));
-               this._cookie.setCookie("credentials",{_id:data.data._id,token:data.data.token},1,environment.API)
+              this.messageBox=response.message;
+              this._cookie.setCookie("credentials",{_id:response.data._id,token:response.data.token},1,environment.API);
+              alert(response.data.details)
+              if(!!response.data.details)
+                this._router.navigateByUrl('/home');
+              else
+                this._router.navigateByUrl('/register_details');
           }
 
       },(err)=>{
@@ -105,7 +107,10 @@ export class AuthenticateComponent implements OnInit {
       console.log(result);
       if(result.data){
         this.otpBox=true;
-        this._router.navigate(['/register_details'])
+        if(!!result.data.details)
+          this._router.navigateByUrl('/home');
+        else
+          this._router.navigateByUrl('/register_details');
       }
       else{
           this.messageBox=result.message;        
